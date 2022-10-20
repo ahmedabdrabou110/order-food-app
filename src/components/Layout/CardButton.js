@@ -8,9 +8,9 @@ const CardButton = props => {
     const ctx = useContext(AuthContent);
     const cartCtx = useContext(CartContext);
 
-    const numberOfCart = cartCtx.items.reduce((current , item) =>{
-      return current + item.amount ;
-    } , 0)
+  const numberOfCartItems = cartCtx.items.reduce((curNumber, item) => {
+    return curNumber + item.amount;
+  }, 0);
     return (
         <button className={styles.button} onClick={ctx.showCart}>
             <span className={styles.icon}>
@@ -18,7 +18,7 @@ const CardButton = props => {
             </span>
             Your Cart
             <span className={styles.badge}>
-                {numberOfCart}
+                {numberOfCartItems}
             </span>
         </button>
     )
