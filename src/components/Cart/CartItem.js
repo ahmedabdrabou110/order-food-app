@@ -8,8 +8,12 @@ import CartItemOrder from './CartItemOrder';
 const CartItem = () => {
   const ctx = useContext(AuthContent);
   const cartCtx = useContext(CartContext);
-  const removeFromCart = id => {};
-  const addToCart = item => {};
+  const removeFromCart = id => {
+    cartCtx.removeItem(id);
+  };
+  const addToCart = item => {
+    cartCtx.addItem({ ...item, amount: 1 });
+  };
   const cartItem = (
     <ul className={styles['cart-items']}>
       {cartCtx.items.map(item => (
@@ -27,19 +31,29 @@ const CartItem = () => {
 
   const totalAmount = cartCtx.totalAmount.toFixed(2);
   const hasItem = cartCtx.items.length > 0;
+
+  const OrderHandler = () => {
+    alert('Done !');
+    window.location.reload(true);
+  };
+
   return (
     <Modal>
       {cartItem}
 
       <div className={styles.total}>
         <span>total Amount</span>
-        <span>{totalAmount}</span>
+        <span>{`$ ${totalAmount}`}</span>
       </div>
       <div className={styles.actions}>
         <button className={styles['button--alt']} onClick={ctx.hideCart}>
           Close
         </button>
-        {hasItem && <button className={styles.button}>Order</button>}
+        {hasItem && (
+          <button className={styles.button} onClick={OrderHandler}>
+            Order
+          </button>
+        )}
       </div>
     </Modal>
   );
