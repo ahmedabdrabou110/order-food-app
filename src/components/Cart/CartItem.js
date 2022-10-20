@@ -1,33 +1,48 @@
-import React , {useContext}from 'react'
+import React, { useContext } from 'react';
 import AuthContent from '../Store/Auth';
+import CartContext from '../Store/CartContent';
 import Modal from '../UI/Modal';
-import styles from "./CartItem.module.css";
-
+import styles from './CartItem.module.css';
+import CartItemOrder from './CartItemOrder';
 
 const CartItem = () => {
   const ctx = useContext(AuthContent);
+  const cartCtx = useContext(CartContext);
+  const removeFromCart = id => {};
+  const addToCart = item => {};
   const cartItem = (
-    <ul className={styles["cart-items"]}>
-      {[{id:"c1" , name:"Sushi" , amount : 3 , price:12.99}].map(item => (
-        <li>{item.name}</li>
+    <ul className={styles['cart-items']}>
+      {cartCtx.items.map(item => (
+        <CartItemOrder
+          key={item.id}
+          name={item.name}
+          price={item.price}
+          amount={item.amount}
+          onAdd={addToCart.bind(null, item)}
+          onRemove={removeFromCart.bind(null, item.id)}
+        />
       ))}
     </ul>
   );
 
-  return  (
+  const totalAmount = cartCtx.totalAmount.toFixed(2);
+  const hasItem = cartCtx.items.length > 0;
+  return (
     <Modal>
-    {cartItem}
+      {cartItem}
 
-    <div className={styles.total}>
-      <span>total Amount</span>
-      <span>35.65</span>
-    </div>
-    <div className={styles.actions}>
-      <button className={styles["button--alt"]} onClick={ctx.hideCart}>Close</button>
-      <button className={styles.button}>Order</button>
-    </div>
+      <div className={styles.total}>
+        <span>total Amount</span>
+        <span>{totalAmount}</span>
+      </div>
+      <div className={styles.actions}>
+        <button className={styles['button--alt']} onClick={ctx.hideCart}>
+          Close
+        </button>
+        {hasItem && <button className={styles.button}>Order</button>}
+      </div>
     </Modal>
-  )
-}
+  );
+};
 
-export default CartItem ; 
+export default CartItem;
